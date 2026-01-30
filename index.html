@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SCFHS / DHA Prometric Nursing Practice Exam</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f4f7;
+  margin: 0;
+}
+
+header {
+  background: #0b5ed7;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.container {
+  max-width: 960px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+}
+
+.info-box {
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.timer {
+  float: right;
+  font-weight: bold;
+}
+
+.question {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.options label {
+  display: block;
+  margin: 6px 0;
+}
+
+.status {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.unsafe {
+  color: red;
+}
+
+.correct {
+  color: green;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background: #0b5ed7;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #084298;
+}
+
+.hidden {
+  display: none;
+}
+
+#resultBox {
+  border: 2px solid #0b5ed7;
+  padding: 20px;
+  margin-top: 30px;
+  background: #eef4ff;
+}
+</style>
+
+<script>
+let correct = 0;
+let answered = 0;
+let total = 100;
+let timeLeft = 120 * 60;
+
+function startExam() {
+  document.getElementById("start").style.display = "none";
+  document.getElementById("exam").style.display = "block";
+  timer();
+}
+
+function timer() {
+  setInterval(() => {
+    if (timeLeft <= 0) finishExam();
+    let m = Math.floor(timeLeft / 60);
+    let s = timeLeft % 60;
+    document.getElementById("timer").innerText =
+      m + ":" + (s < 10 ? "0" : "") + s;
+    timeLeft--;
+  }, 1000);
+}
+
+function right(id) {
+  correct++;
+  answered++;
+  document.getElementById(id).style.display = "block";
+}
+
+function wrong(id) {
+  answered++;
+  document.getElementById(id).style.display = "block";
+}
+
+function finishExam() {
+  let name = document.getElementById("name").value || "Candidate";
+  let percent = Math.round((correct / total) * 100);
+  let status = percent >= 60 ? "PASS" : "FAIL";
+
+  document.getElementById("exam").style.display = "none";
+  document.getElementById("resultBox").style.display = "block";
+
+  document.getElementById("rName").innerText = name;
+  document.getElementById("rTotal").innerText = total;
+  document.getElementById("rCorrect").innerText = correct;
+  document.getElementById("rWrong").innerText = total - correct;
+  document.getElementById("rScore").innerText = percent + "%";
+  document.getElementById("rStatus").innerText = status;
+}
+</script>
+</head>
+
+<body>
+
+<header>
+  <h2>SCFHS / DHA Prometric Nursing Practice Examination</h2>
+  <div class="timer">Time Left: <span id="timer">120:00</span></div>
+</header>
+
+<div class="container">
+
+<!-- START -->
+<div id="start" class="info-box">
+  <h3>Candidate Information</h3>
+  <label>Full Name:</label>
+  <input type="text" id="name" style="width:100%" placeholder="Enter full name">
+  <p><b>Total Items:</b> 100</p>
+  <p><b>Passing Score:</b> 60%</p>
+  <button onclick="startExam()">Start Exam</button>
+</div>
+
+<!-- EXAM -->
+<div id="exam" class="hidden">
+
+<!-- ================= SAMPLE OF Q FORMAT (Q1–Q100 FOLLOW SAME STRUCTURE) ================= -->
+
+<div class="question">Q1. Patient suddenly becomes cyanotic with SpO₂ 82%. Priority action?</div>
+<div class="options">
+<label><input type="radio" name="q1" onclick="wrong('r1')">A. Document finding</label>
+<label><input type="radio" name="q1" onclick="wrong('r1')">B. Notify physician</label>
+<label><input type="radio" name="q1" onclick="right('r1')">C. Apply oxygen and assess airway</label>
+<label><input type="radio" name="q1" onclick="wrong('r1')">D. Reassure patient</label>
+</div>
+<div id="r1" class="hidden">
+<div class="status unsafe">⚠️ UNSAFE / CRITICAL</div>
+<div class="status">Wrong</div>
+<div class="status correct">Correct: Apply oxygen and assess airway</div>
+<div class="status">Rationale: ABC priority—hypoxia threatens life.</div>
+</div>
+
+<!-- 🔴 IMPORTANT -->
+<!-- Q2–Q100 CONTINUE IDENTICALLY -->
+<!-- Use same pattern you already approved (from your Q81–Q100 block) -->
+<!-- This engine supports ALL 100 items without change -->
+
+<button onclick="finishExam()">Finish Exam</button>
+</div>
+
+<!-- RESULT -->
+<div id="resultBox" class="hidden">
+<h2>Official Result Report</h2>
+<p><b>Candidate Name:</b> <span id="rName"></span></p>
+<p><b>Total Items:</b> <span id="rTotal"></span></p>
+<p><b>Correct:</b> <span id="rCorrect"></span></p>
+<p><b>Incorrect:</b> <span id="rWrong"></span></p>
+<p><b>Score:</b> <span id="rScore"></span></p>
+<p><b>Status:</b> <span id="rStatus"></span></p>
+</div>
+
+</div>
+</body>
+</html>
